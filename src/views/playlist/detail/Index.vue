@@ -6,7 +6,10 @@
           <img :src="detail.coverImgUrl + '?param=200y200'" alt="" />
         </div>
         <div class="info">
-          <div class="title ellipsis-two">{{ detail.name }}</div>
+          <div class="title flex-between">
+            <span>{{ detail.name }}</span>
+            <div></div>
+          </div>
           <div class="user flex-row">
             <div class="avatar">
               <img :src="creator.avatarUrl + '?param=100y100'" alt="" />
@@ -16,7 +19,7 @@
               {{ utils.dateFormat(detail.createTime, 'YYYY-MM-DD') }}创建
             </p>
           </div>
-          <div class="tag flex-row">
+          <div class="tag flex-row" v-if="detail.tags && detail.tags.length > 0">
             标签：<a
               v-for="item of detail.tags"
               :key="item"
@@ -38,7 +41,7 @@
         </div>
       </div>
       <div class="content">
-        <artist-list :songs="songs" />
+        <artist-list :songs="songs" @collectArtist="collectArtist" :subscribed="detail.subscribed" />
       </div>
     </div>
     <div class="right">
@@ -132,7 +135,8 @@ export default {
       // 歌曲列表
       songs: [],
       // 收藏这个歌单的人数量
-      s: 32
+      s: 32,
+      artistId: ''
     }
   },
   components: {
@@ -168,8 +172,9 @@ export default {
     },
     // 获取歌单详情
     async getPlayListDetail(id, s) {
+      let timestamp = new Date().valueOf()
       try {
-        let res = await this.$api.getPlayListDetail(id, s)
+        let res = await this.$api.getPlayListDetail(id, s, timestamp)
         if (res.code === 200) {
           res.playlist.description = res.playlist.description.replace(
             /(\r\n|\n|\r)/gm,
@@ -297,6 +302,27 @@ export default {
         }
       })
     },
+    // 收藏歌单
+    async collectArtist() {
+      let t = this.detail.subscribed ? 2 : 1
+      let message = this.detail.subscribed ? '已取消收藏' : '收藏成功'
+      try {
+        let res = await this.$api.collectPlaylist(t, this.artistId)
+        if (res.code === 200) {
+          this.$message({
+            message,
+            type: 'success'
+          });
+
+          setTimeout(() => {
+            this.getPlayListDetail(this.artistId, 100)
+          }, 300)
+        }
+      } catch (error) {
+        this.$message.error(error)
+      }
+      
+    },
     // 初始化
     _initialize(id) {
       this.getPlayListDetail(id, 100)
@@ -308,6 +334,7 @@ export default {
   created() {},
   mounted() {
     let id = this.$route.query.id
+    this.artistId = id
     if (id) {
       this._initialize(id)
     }
@@ -357,15 +384,19 @@ export default {
         flex-direction: column;
         justify-content: center;
         .title {
+          width: 100%;
           font-size: 24px;
           font-weight: 700;
           line-height: 24px;
           margin-bottom: 20px;
           margin-top: 10px;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+          overflow: hidden;
         }
         .tag {
-          margin-top: 15px;
-          margin-bottom: 15px;
+          // margin-top: 15px;
+          // margin-bottom: 15px;
           a {
             color: #fff;
             background: $color-theme;
@@ -385,6 +416,7 @@ export default {
           }
         }
         .user {
+          margin-bottom: 15px;
           .avatar {
             width: 30px;
             height: 30px;
@@ -411,6 +443,7 @@ export default {
           display: flex;
           flex-direction: column;
           line-height: 1.6;
+          margin-top: 15px;
           span {
             flex-shrink: 0;
             color: $color-theme;

@@ -63,7 +63,7 @@
             <span :class="type == 0 ? 'active' : ''" @click="changeType(0)">所有时间</span>
           </div>
         </div>
-        <artist-list :songs="songs" />
+        <artist-list :songs="songs" :isPerson="isPerson" />
       </div>
       <div class="right">
         <div class="my module shadow">
@@ -98,7 +98,8 @@ export default {
       collectList: [],
       songs: [],
       num: 2,
-      type: 1
+      type: 1,
+      isPerson: true
     }
   },
   components: {

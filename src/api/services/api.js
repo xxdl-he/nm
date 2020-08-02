@@ -79,8 +79,8 @@ export const getPlayList = params => api.get(`/top/playlist`, { params })
 /**
  * @method 获取歌单详情
  */
-export const getPlayListDetail = (id, s) =>
-  api.get(`/playlist/detail?id=${id}&s=${s}`, {})
+export const getPlayListDetail = (id, s, time) =>
+  api.get(`/playlist/detail?id=${id}&s=${s}&timestamp=${time}`, {})
 
 /**
  * @method 获取歌曲详情
@@ -229,3 +229,8 @@ export const getMvComments = params => api.get(`/comment/mv`, { params })
  * @method 获取歌词
  */
 export const getLyric = id => api.get(`/lyric?id=${id}`, {})
+
+/**
+ * @method 收藏/取消收藏歌单
+ */
+export const collectPlaylist = (t, id) => api.get(`/playlist/subscribe?t=${t}&id=${id}`, {})
