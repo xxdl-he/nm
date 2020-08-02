@@ -70,50 +70,25 @@
                 />
               </div>
             </div>
+            <!-- <div class="search-hot">
+              <div class="title flex-row">
+                <i class="iconfont nicelishi"></i>
+                <span>历史搜索</span>
+              </div>
+              <ul class="tags">
+                <li v-for="item of hots" :key="item.first">
+                  <a class="btn">{{ item.first }}</a>
+                </li>
+              </ul>
+            </div> -->
             <div class="search-hot">
               <div class="title flex-row">
                 <i class="iconfont niceremensousuo"></i>
                 <span>热门搜索</span>
               </div>
               <ul class="tags">
-                <li>
-                  <a class="btn">Apple</a>
-                </li>
-                <li>
-                  <a class="btn">Aripods</a>
-                </li>
-                <li>
-                  <a class="btn">Cupertino</a>
-                </li>
-                <li>
-                  <a class="btn">亚洲市场</a>
-                </li>
-                <li>
-                  <a class="btn">人人车</a>
-                </li>
-                <li>
-                  <a class="btn">区块链</a>
-                </li>
-                <li>
-                  <a class="btn">华为</a>
-                </li>
-                <li>
-                  <a class="btn">合作伙伴</a>
-                </li>
-                <li>
-                  <a class="btn">巨头企业</a>
-                </li>
-                <li>
-                  <a class="btn">特殊工具</a>
-                </li>
-                <li>
-                  <a class="btn">纽约时报</a>
-                </li>
-                <li>
-                  <a class="btn">苹果</a>
-                </li>
-                <li>
-                  <a class="btn">资金链</a>
+                <li v-for="item of hots" :key="item.first">
+                  <a class="btn">{{ item.first }}</a>
                 </li>
               </ul>
             </div>
@@ -133,6 +108,7 @@ export default {
   data() {
     return {
       keyword: [],
+      hots: [],
       searchOpenClass: '',
       searchCloseClass: ''
     }
@@ -150,11 +126,23 @@ export default {
     openSearchPop() {
       this.searchOpenClass = 'open'
       this.searchCloseClass = ''
+      this.getSearchHot()
     },
     // 关闭搜索框
     closeSearchPop() {
       this.searchOpenClass = ''
       this.searchCloseClass = 'close'
+    },
+    // 获取热搜列表
+    async getSearchHot() {
+      try {
+        let res = await this.$api.getSearchHot()
+        if(res.code === 200) {
+          this.hots = res.result.hots
+        }
+      } catch (error) {
+        console.log(error)
+      }
     },
     // 登录
     login() {
@@ -173,7 +161,8 @@ export default {
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
-  mounted() {}
+  mounted() {
+  }
 }
 </script>
 <style lang="stylus" scoped>
@@ -394,6 +383,7 @@ export default {
             align-items: center;
             li {
               padding: 0.25rem;
+              cursor: pointer;
               .btn {
                 display: block;
                 font-weight: 400;
