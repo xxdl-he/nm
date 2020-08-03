@@ -19,6 +19,12 @@ export const getSearchHot = () => api.get('/search/hot', {})
 export const search = (keywords, limit, offset, type) => api.get(`/search?keywords=${keywords}&limit=${limit}&offset=${offset}&type=${type}`, {})
 
 /**
+ * @method 搜索建议
+ * @param {String} keywords 关键词
+ */
+export const searchSuggest = keywords => api.get(`/search/suggest?keywords=${keywords}`, {})
+
+/**
  * @method 获取推荐歌单
  * @params limit 取出数量默认为 30
  */

@@ -167,6 +167,17 @@ export const appRouter = [
         component: resolve => {
           require(['@/views/personal/Index.vue'], resolve)
         }
+      },
+      {
+        path: 'search',
+        meta: {
+          title: '搜索',
+          keepAlive: true
+        },
+        name: 'search',
+        component: resolve => {
+          require(['@/views/search/Index.vue'], resolve)
+        }
       }
     ]
   }
