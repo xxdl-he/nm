@@ -8,9 +8,9 @@
         <i class="iconfont niceicon-heart"></i>
         {{ collectText }}
       </div>
-      <div class="item" v-if="!isPerson">
+      <!-- <div class="item" v-if="!isPerson">
         <i class="iconfont nicefenxiang1"></i> 分享
-      </div>
+      </div> -->
     </div>
     <table class="artist-table">
       <thead>

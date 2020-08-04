@@ -66,7 +66,9 @@
                 <input
                   class="text"
                   type="text"
+                  v-model="keyword"
                   placeholder="请输入搜索关键词并按回车键…"
+                  v-on:keyup.enter="search"
                 />
               </div>
             </div>
@@ -88,7 +90,7 @@
               </div>
               <ul class="tags">
                 <li v-for="item of hots" :key="item.first">
-                  <a class="btn">{{ item.first }}</a>
+                  <a class="btn" @click="tag(item.first)">{{ item.first }}</a>
                 </li>
               </ul>
             </div>
@@ -107,7 +109,7 @@ import { mapGetters } from 'vuex'
 export default {
   data() {
     return {
-      keyword: [],
+      keyword: '',
       hots: [],
       searchOpenClass: '',
       searchCloseClass: ''
@@ -132,6 +134,27 @@ export default {
     closeSearchPop() {
       this.searchOpenClass = ''
       this.searchCloseClass = 'close'
+    },
+    // 搜索
+    search() {
+      if(this.keyword.split(" ").join("").length !== 0) {
+        this.closeSearchPop()
+        this.$router.push({
+          name: 'search',
+          query: {
+            keyword: this.keyword
+          }
+        })
+      }
+    },
+    tag(keyword) {
+      this.closeSearchPop()
+      this.$router.push({
+        name: 'search',
+        query: {
+          keyword
+        }
+      })
     },
     // 获取热搜列表
     async getSearchHot() {

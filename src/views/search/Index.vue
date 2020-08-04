@@ -4,9 +4,9 @@
       <div class="search-inner">
         <div class="search-box flex-row">
           <input v-model="keyword" maxlength="128" type="text" placeholder="搜索音乐/MV/歌单/歌手" class="search">
-          <i class="iconfont nicesearch-o search-icon"></i>
+          <i class="iconfont nicesearch-o search-icon" @click="search"></i>
         </div>
-        <div class="list hot">
+        <!-- <div class="list" :class="!isKeyword ? 'hot' : ''">
           <div class="item" v-if="searchResult.songs && searchResult.songs.length > 0">
             <div class="title flex-row"> <i class="iconfont niceyinfu3"></i> 单曲</div>
             <ul>
@@ -31,28 +31,55 @@
               <li v-for="item of searchResult.playlists" :key="item.id">{{ item.name }}</li>
             </ul>
           </div>
-        </div>
+        </div> -->
+      </div>
+    </div>
+    <div class="main container">
+      <div class="tab flex-row">
+        <h2>搜索结果</h2>
+        <a class="active">单曲</a>
+        <a>歌手</a>
+        <a>专辑</a>
+        <a>视频</a>
+        <a>歌单</a>
+        <!-- <a>用户</a> -->
+      </div>
+      <div class="content">
+        <artist-list :songs="songs" :isPerson="isPerson" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
+  import { createSong } from '@/model/song'
+  import ArtistList from 'components/common/artistList/Index'
   export default {
     data() {
       return {
-        keyword: '想',
-        searchResult: {}
+        keyword: '',
+        searchResult: {},
+        limit: 30,
+        offset: 0, 
+        type: 1,
+        isPerson: true,
+        songs: []
       };
     },
-    components: {},
-    computed: {},
+    components: {
+      ArtistList
+    },
+    computed: {
+      isKeyword () {
+        return this.keyword.split(" ").join("").length == 0
+      }
+    },
     watch: {
       keyword () {
         if (this.timer) {
           clearTimeout(this.timer)
         }
-        if (!this.keyword) {
+        if (!this.keyword || this.keyword.split(" ").join("").length == 0) {
           this.searchResult = {}
           return
         }
@@ -62,17 +89,48 @@
       }
     },
     methods: {
+      // 搜索建议
       async searchSuggest() {
         let res = await this.$api.searchSuggest(this.keyword)
         console.log(res)
-        this.searchResult = res.result
-      }
+        if(JSON.stringify(res.result) !== '{}') {
+          this.searchResult = res.result
+        }
+      },
+      // 搜索
+      search() {
+        this.$api.search(
+          this.keyword, this.limit, this.offset, this.type
+        ).then(res => {
+          console.log(res)
+          if(res.code === 200) {
+            this.songs = this._normalizeSongs(res.result.songs)
+          }
+          
+        }).catch(err => {
+          console.log(err)
+        })
+      },
+      // 处理歌曲
+      _normalizeSongs(list) {
+        let ret = []
+        list.map(item => {
+          if (item.id) {
+            ret.push(createSong(item))
+          }
+        })
+        return ret
+      },
     },
     created() {
 
     },
     mounted() {
-
+      let keyword = this.$route.query.keyword
+      if(keyword) {
+        this.keyword = keyword
+        this.search()
+      }
     },
   }
 </script>
@@ -159,6 +217,44 @@
             &:hover {
               background: #f5f5f5;
             }
+          }
+        }
+      }
+    }
+  }
+  .main {
+    .tab {
+      display: flex;
+      align-items: baseline;
+      margin-top: 43px;
+      margin-bottom: 42px;
+      h2 {
+        font-size: 22px;
+        font-weight: 600;
+        line-height: 30px;
+        margin-right: 40px;
+      }
+      a {
+        position: relative;
+        display: inline-block;
+        height: 20px;
+        line-height: 20px;
+        margin-right: 34px;
+        font-weight: 300;
+        color: #333;
+        z-index: 1;
+        cursor: pointer;
+        &.active {
+          &::after {
+            position: absolute;
+            content: "";
+            left: 0;
+            bottom: 1px;
+            width: 100%;
+            height: 6px;
+            background: $color-theme;
+            opacity: 0.5;
+            z-index: -1;
           }
         }
       }
