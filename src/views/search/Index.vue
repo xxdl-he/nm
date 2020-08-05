@@ -4,7 +4,7 @@
       <div class="search-inner">
         <div class="search-box flex-row">
           <input v-model="keyword" maxlength="128" type="text" placeholder="搜索音乐/MV/歌单/歌手" class="search">
-          <i class="iconfont nicesearch-o search-icon" @click="search"></i>
+          <i class="iconfont nicesearch-o search-icon" @click="search(1)"></i>
         </div>
         <!-- <div class="list" :class="!isKeyword ? 'hot' : ''">
           <div class="item" v-if="searchResult.songs && searchResult.songs.length > 0">
@@ -37,15 +37,25 @@
     <div class="main container">
       <div class="tab flex-row">
         <h2>搜索结果</h2>
-        <a class="active">单曲</a>
-        <a>歌手</a>
-        <a>专辑</a>
-        <a>视频</a>
-        <a>歌单</a>
+        <a :class="type === 1 ? 'active' : ''" @click="changeType(1)">单曲</a>
+        <a :class="type === 100 ? 'active' : ''" @click="changeType(100)">歌手</a>
+        <a :class="type === 10 ? 'active' : ''" @click="changeType(10)">专辑</a>
+        <a :class="type === 1014 ? 'active' : ''" @click="changeType(1014)">视频</a>
+        <a :class="type === 1000 ? 'active' : ''" @click="changeType(1000)">歌单</a>
         <!-- <a>用户</a> -->
       </div>
       <div class="content">
-        <artist-list :songs="songs" :isPerson="isPerson" />
+        <artist-list :songs="songs" :isPerson="isPerson" v-if="type === 1" />
+        <ul class="singer-list" v-if="type === 100">
+          <singer-item
+            v-for="item of singers"
+            :key="item.id"
+            :item="item"
+          />
+        </ul>
+        <album-list :albums="albums" v-if="type == 10" />
+        <mv-list :mvs="videos" v-if="type == 1014"></mv-list>
+        <song-sheet :sheetList="playList" v-if="type == 1000"></song-sheet>
       </div>
     </div>
   </div>
@@ -53,7 +63,12 @@
 
 <script>
   import { createSong } from '@/model/song'
+  import { createVideo } from '@/model/video'
   import ArtistList from 'components/common/artistList/Index'
+  import SingerItem from 'components/common/singerItem/Index'
+  import AlbumList from 'components/common/albumList/Index'
+  import MvList from 'components/common/mvList/Index'
+  import songSheet from 'components/common/songSheet/Index'
   export default {
     data() {
       return {
@@ -63,11 +78,19 @@
         offset: 0, 
         type: 1,
         isPerson: true,
-        songs: []
+        songs: [],
+        singers: [],
+        albums: [],
+        videos: [],
+        playList: []
       };
     },
     components: {
-      ArtistList
+      ArtistList,
+      SingerItem,
+      AlbumList,
+      MvList,
+      songSheet
     },
     computed: {
       isKeyword () {
@@ -89,6 +112,11 @@
       }
     },
     methods: {
+      // 更改搜索类型
+      changeType(type) {
+        this.type = type
+        this.search(type)
+      },
       // 搜索建议
       async searchSuggest() {
         let res = await this.$api.searchSuggest(this.keyword)
@@ -98,18 +126,51 @@
         }
       },
       // 搜索
-      search() {
+      search(type) {
         this.$api.search(
-          this.keyword, this.limit, this.offset, this.type
+          this.keyword, this.limit, this.offset, type
         ).then(res => {
-          console.log(res)
           if(res.code === 200) {
-            this.songs = this._normalizeSongs(res.result.songs)
+            switch(type) {
+              case 1:
+                let lists = res.result.songs
+                let sliceArr = []
+                lists.map(item => {
+                  sliceArr.push(item.id)
+                })
+                this.getSongDetail(sliceArr)
+                break;
+              case 100:
+                this.singers = res.result.artists
+                break;
+              case 10:
+                this.albums = res.result.albums
+                break;
+              case 1014:
+                this.videos = this._normalizeVideos(res.result.videos)
+                break;
+              case 1000:
+                this.playList = res.result.playlists
+                break;
+              default:
+            } 
           }
           
         }).catch(err => {
           console.log(err)
         })
+      },
+      // 获取歌曲列表
+      async getSongDetail(sliceArr) {
+        let timestamp = new Date().valueOf()
+        let ids = sliceArr.join(',')
+        try {
+          let beforeRes = await this.$api.getSongDetail(ids, timestamp)
+          let res = beforeRes.songs
+          this.songs = this._normalizeSongs(res)
+        } catch (error) {
+          this.$message.error('error')
+        }
       },
       // 处理歌曲
       _normalizeSongs(list) {
@@ -121,6 +182,26 @@
         })
         return ret
       },
+      // 处理视频
+      _normalizeVideos(list) {
+        let ret = []
+        list.map(item => {
+          if (item.vid) {
+            ret.push(
+              createVideo({
+                id: item.vid,
+                nickName: item.creator.nickname,
+                name: item.title,
+                playCount: item.playTime,
+                duration: item.durationms,
+                image: item.coverUrl,
+                isLive: false
+              })
+            )
+          }
+        })
+        return ret
+      }
     },
     created() {
 
@@ -129,7 +210,7 @@
       let keyword = this.$route.query.keyword
       if(keyword) {
         this.keyword = keyword
-        this.search()
+        this.search(1)
       }
     },
   }
@@ -257,6 +338,14 @@
             z-index: -1;
           }
         }
+      }
+    }
+    .content {
+      .singer-list {
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: 30px;
+        margin: 30px -15px 0;
       }
     }
   }
