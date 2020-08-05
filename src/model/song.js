@@ -31,9 +31,11 @@ export function createSong(musicData) {
     id: musicData.id,
     singer: filterSinger(musicData.ar || musicData.artists),
     name: musicData.name,
-    album: musicData.al ? musicData.al.name : musicData.album.name ,
+    album: musicData.al ? musicData.al.name : musicData.album.name,
     duration: utils.formatSecond(musicData.dt || musicData.duration),
-    image: musicData.al ? musicData.al.picUrl : musicData.album.artist.img1v1Url,
+    image: musicData.al
+      ? musicData.al.picUrl
+      : musicData.album.artist.img1v1Url,
     url: `https://music.163.com/song/media/outer/url?id=${musicData.id}.mp3`,
     playCount: musicData.playCount || '',
     score: musicData.score || ''

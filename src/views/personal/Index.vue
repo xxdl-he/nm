@@ -56,11 +56,17 @@
       </div>
       <div class="center shadow">
         <div class="card-header flex-between">
-          <p class="flex-row">听歌排行 <span>（累积听歌{{ userInfo.listenSongs }}首）</span></p>
+          <p class="flex-row">
+            听歌排行 <span>（累积听歌{{ userInfo.listenSongs }}首）</span>
+          </p>
           <div class="tab flex-row">
-            <span :class="type == 1 ? 'active' : ''" @click="changeType(1)">最近一周</span>
+            <span :class="type == 1 ? 'active' : ''" @click="changeType(1)"
+              >最近一周</span
+            >
             <span class="line"></span>
-            <span :class="type == 0 ? 'active' : ''" @click="changeType(0)">所有时间</span>
+            <span :class="type == 0 ? 'active' : ''" @click="changeType(0)"
+              >所有时间</span
+            >
           </div>
         </div>
         <artist-list :songs="songs" :isPerson="isPerson" />
@@ -151,12 +157,11 @@ export default {
       try {
         let res = await this.$api.getUserRecord(this.userInfo.userId, this.type)
         if (res.code === 200) {
-          if(this.type == 1) {
+          if (this.type == 1) {
             this.songs = this._normalizeSongs(res.weekData)
           } else {
             this.songs = this._normalizeSongs(res.allData)
           }
-          
         }
       } catch (error) {
         console.log(error)

@@ -137,7 +137,7 @@ export default {
     },
     // 搜索
     search() {
-      if(this.keyword.split(" ").join("").length !== 0) {
+      if (this.keyword.split(' ').join('').length !== 0) {
         this.closeSearchPop()
         this.$router.push({
           name: 'search',
@@ -160,7 +160,7 @@ export default {
     async getSearchHot() {
       try {
         let res = await this.$api.getSearchHot()
-        if(res.code === 200) {
+        if (res.code === 200) {
           this.hots = res.result.hots
         }
       } catch (error) {
@@ -184,8 +184,7 @@ export default {
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
-  mounted() {
-  }
+  mounted() {}
 }
 </script>
 <style lang="stylus" scoped>

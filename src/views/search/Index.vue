@@ -3,55 +3,95 @@
     <div class="banner layer">
       <div class="search-inner">
         <div class="search-box flex-row">
-          <input v-model="keyword" maxlength="128" type="text" placeholder="搜索音乐/MV/歌单/歌手" class="search">
+          <input
+            v-model="keyword"
+            maxlength="128"
+            type="text"
+            placeholder="搜索音乐/MV/歌单/歌手"
+            class="search"
+          />
           <i class="iconfont nicesearch-o search-icon" @click="search(1)"></i>
         </div>
-        <!-- <div class="list" :class="!isKeyword ? 'hot' : ''">
-          <div class="item" v-if="searchResult.songs && searchResult.songs.length > 0">
-            <div class="title flex-row"> <i class="iconfont niceyinfu3"></i> 单曲</div>
+        <div class="list" :class="!isKeyword ? 'hot' : ''" v-if="a">
+          <div
+            class="item"
+            v-if="searchResult.songs && searchResult.songs.length > 0"
+          >
+            <div class="title flex-row">
+              <i class="iconfont niceyinfu3"></i> 单曲
+            </div>
             <ul>
-              <li v-for="item of searchResult.songs" :key="item.id">{{ item.name }}</li>
+              <li v-for="item of searchResult.songs" :key="item.id">
+                {{ item.name }}
+              </li>
             </ul>
           </div>
-          <div class="item" v-if="searchResult.artists && searchResult.artists.length > 0">
-            <div class="title flex-row"> <i class="iconfont niceicon-4"></i> 歌手</div>
+          <div
+            class="item"
+            v-if="searchResult.artists && searchResult.artists.length > 0"
+          >
+            <div class="title flex-row">
+              <i class="iconfont niceicon-4"></i> 歌手
+            </div>
             <ul>
-              <li v-for="item of searchResult.artists" :key="item.id">{{ item.name }}</li>
+              <li v-for="item of searchResult.artists" :key="item.id">
+                {{ item.name }}
+              </li>
             </ul>
           </div>
-          <div class="item" v-if="searchResult.albums && searchResult.albums.length > 0">
-            <div class="title flex-row"> <i class="iconfont niceRaidobox-selectedRai1"></i> 专辑</div>
+          <div
+            class="item"
+            v-if="searchResult.albums && searchResult.albums.length > 0"
+          >
+            <div class="title flex-row">
+              <i class="iconfont niceRaidobox-selectedRai1"></i> 专辑
+            </div>
             <ul>
-              <li v-for="item of searchResult.albums" :key="item.id">{{ item.name }}</li>
+              <li v-for="item of searchResult.albums" :key="item.id">
+                {{ item.name }}
+              </li>
             </ul>
           </div>
-          <div class="item" v-if="searchResult.playlists && searchResult.playlists.length > 0">
-            <div class="title flex-row"> <i class="iconfont nicebofangliebiao24" style="font-size: 20px;"></i> 歌单</div>
+          <div
+            class="item"
+            v-if="searchResult.playlists && searchResult.playlists.length > 0"
+          >
+            <div class="title flex-row">
+              <i
+                class="iconfont nicebofangliebiao24"
+                style="font-size: 20px;"
+              ></i>
+              歌单
+            </div>
             <ul>
-              <li v-for="item of searchResult.playlists" :key="item.id">{{ item.name }}</li>
+              <li v-for="item of searchResult.playlists" :key="item.id">
+                {{ item.name }}
+              </li>
             </ul>
           </div>
-        </div> -->
+        </div>
       </div>
     </div>
     <div class="main container">
       <div class="tab flex-row">
         <h2>搜索结果</h2>
         <a :class="type === 1 ? 'active' : ''" @click="changeType(1)">单曲</a>
-        <a :class="type === 100 ? 'active' : ''" @click="changeType(100)">歌手</a>
+        <a :class="type === 100 ? 'active' : ''" @click="changeType(100)"
+          >歌手</a
+        >
         <a :class="type === 10 ? 'active' : ''" @click="changeType(10)">专辑</a>
-        <a :class="type === 1014 ? 'active' : ''" @click="changeType(1014)">视频</a>
-        <a :class="type === 1000 ? 'active' : ''" @click="changeType(1000)">歌单</a>
+        <a :class="type === 1014 ? 'active' : ''" @click="changeType(1014)"
+          >视频</a
+        >
+        <a :class="type === 1000 ? 'active' : ''" @click="changeType(1000)"
+          >歌单</a
+        >
         <!-- <a>用户</a> -->
       </div>
       <div class="content">
         <artist-list :songs="songs" :isPerson="isPerson" v-if="type === 1" />
         <ul class="singer-list" v-if="type === 100">
-          <singer-item
-            v-for="item of singers"
-            :key="item.id"
-            :item="item"
-          />
+          <singer-item v-for="item of singers" :key="item.id" :item="item" />
         </ul>
         <album-list :albums="albums" v-if="type == 10" />
         <mv-list :mvs="videos" v-if="type == 1014"></mv-list>
@@ -62,76 +102,76 @@
 </template>
 
 <script>
-  import { createSong } from '@/model/song'
-  import { createVideo } from '@/model/video'
-  import ArtistList from 'components/common/artistList/Index'
-  import SingerItem from 'components/common/singerItem/Index'
-  import AlbumList from 'components/common/albumList/Index'
-  import MvList from 'components/common/mvList/Index'
-  import songSheet from 'components/common/songSheet/Index'
-  export default {
-    data() {
-      return {
-        keyword: '',
-        searchResult: {},
-        limit: 30,
-        offset: 0, 
-        type: 1,
-        isPerson: true,
-        songs: [],
-        singers: [],
-        albums: [],
-        videos: [],
-        playList: []
-      };
+import { createSong } from '@/model/song'
+import { createVideo } from '@/model/video'
+import ArtistList from 'components/common/artistList/Index'
+import SingerItem from 'components/common/singerItem/Index'
+import AlbumList from 'components/common/albumList/Index'
+import MvList from 'components/common/mvList/Index'
+import songSheet from 'components/common/songSheet/Index'
+export default {
+  data() {
+    return {
+      keyword: '',
+      searchResult: {},
+      limit: 30,
+      offset: 0,
+      type: 1,
+      isPerson: true,
+      songs: [],
+      singers: [],
+      albums: [],
+      videos: [],
+      playList: []
+    }
+  },
+  components: {
+    ArtistList,
+    SingerItem,
+    AlbumList,
+    MvList,
+    songSheet
+  },
+  computed: {
+    isKeyword() {
+      return this.keyword.split(' ').join('').length == 0
+    }
+  },
+  watch: {
+    keyword() {
+      if (this.timer) {
+        clearTimeout(this.timer)
+      }
+      if (!this.keyword || this.keyword.split(' ').join('').length == 0) {
+        this.searchResult = {}
+        return
+      }
+      this.timer = setTimeout(() => {
+        this.searchSuggest()
+      }, 100)
+    }
+  },
+  methods: {
+    // 更改搜索类型
+    changeType(type) {
+      this.type = type
+      this.search(type)
     },
-    components: {
-      ArtistList,
-      SingerItem,
-      AlbumList,
-      MvList,
-      songSheet
-    },
-    computed: {
-      isKeyword () {
-        return this.keyword.split(" ").join("").length == 0
+    // 搜索建议
+    async searchSuggest() {
+      let res = await this.$api.searchSuggest(this.keyword)
+      console.log(res)
+      if (JSON.stringify(res.result) !== '{}') {
+        this.searchResult = res.result
       }
     },
-    watch: {
-      keyword () {
-        if (this.timer) {
-          clearTimeout(this.timer)
-        }
-        if (!this.keyword || this.keyword.split(" ").join("").length == 0) {
-          this.searchResult = {}
-          return
-        }
-        this.timer = setTimeout(() => {
-          this.searchSuggest()
-        }, 100)
-      }
-    },
-    methods: {
-      // 更改搜索类型
-      changeType(type) {
-        this.type = type
-        this.search(type)
-      },
-      // 搜索建议
-      async searchSuggest() {
-        let res = await this.$api.searchSuggest(this.keyword)
-        console.log(res)
-        if(JSON.stringify(res.result) !== '{}') {
-          this.searchResult = res.result
-        }
-      },
-      // 搜索
-      search(type) {
-        this.$api.search(
-          this.keyword, this.limit, this.offset, type
-        ).then(res => {
-          if(res.code === 200) {
-            switch(type) {
+    // 搜索
+    search(type) {
+      this.$api
+        .search(this.keyword, this.limit, this.offset, type)
+        .then(res => {
+          if (res.code === 200) {
+            switch (type) {
               case 1:
                 let lists = res.result.songs
                 let sliceArr = []
@@ -139,83 +179,81 @@
                   sliceArr.push(item.id)
                 })
                 this.getSongDetail(sliceArr)
-                break;
+                break
               case 100:
                 this.singers = res.result.artists
-                break;
+                break
               case 10:
                 this.albums = res.result.albums
-                break;
+                break
               case 1014:
                 this.videos = this._normalizeVideos(res.result.videos)
-                break;
+                break
               case 1000:
                 this.playList = res.result.playlists
-                break;
+                break
               default:
-            } 
+            }
           }
-          
-        }).catch(err => {
+        })
+        .catch(err => {
           console.log(err)
         })
-      },
-      // 获取歌曲列表
-      async getSongDetail(sliceArr) {
-        let timestamp = new Date().valueOf()
-        let ids = sliceArr.join(',')
-        try {
-          let beforeRes = await this.$api.getSongDetail(ids, timestamp)
-          let res = beforeRes.songs
-          this.songs = this._normalizeSongs(res)
-        } catch (error) {
-          this.$message.error('error')
+    },
+    // 获取歌曲列表
+    async getSongDetail(sliceArr) {
+      let timestamp = new Date().valueOf()
+      let ids = sliceArr.join(',')
+      try {
+        let beforeRes = await this.$api.getSongDetail(ids, timestamp)
+        let res = beforeRes.songs
+        this.songs = this._normalizeSongs(res)
+      } catch (error) {
+        this.$message.error('error')
+      }
+    },
+    // 处理歌曲
+    _normalizeSongs(list) {
+      let ret = []
+      list.map(item => {
+        if (item.id) {
+          ret.push(createSong(item))
         }
-      },
-      // 处理歌曲
-      _normalizeSongs(list) {
-        let ret = []
-        list.map(item => {
-          if (item.id) {
-            ret.push(createSong(item))
-          }
-        })
-        return ret
-      },
-      // 处理视频
-      _normalizeVideos(list) {
-        let ret = []
-        list.map(item => {
-          if (item.vid) {
-            ret.push(
-              createVideo({
-                id: item.vid,
-                nickName: item.creator.nickname,
-                name: item.title,
-                playCount: item.playTime,
-                duration: item.durationms,
-                image: item.coverUrl,
-                isLive: false
-              })
-            )
-          }
-        })
-        return ret
-      }
+      })
+      return ret
     },
-    created() {
-
-    },
-    mounted() {
-      let keyword = this.$route.query.keyword
-      if(keyword) {
-        this.keyword = keyword
-        this.search(1)
-      }
-    },
+    // 处理视频
+    _normalizeVideos(list) {
+      let ret = []
+      list.map(item => {
+        if (item.vid) {
+          ret.push(
+            createVideo({
+              id: item.vid,
+              nickName: item.creator.nickname,
+              name: item.title,
+              playCount: item.playTime,
+              duration: item.durationms,
+              image: item.coverUrl,
+              isLive: false
+            })
+          )
+        }
+      })
+      return ret
+    }
+  },
+  created() {},
+  mounted() {
+    let keyword = this.$route.query.keyword
+    if (keyword) {
+      this.keyword = keyword
+      this.search(1)
+    }
   }
+}
 </script>
-<style lang='stylus' scoped>
+<style lang="stylus" scoped>
 .search-wrap {
   margin-top: -20px;
   .banner {

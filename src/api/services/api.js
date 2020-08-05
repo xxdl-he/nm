@@ -16,13 +16,18 @@ export const getSearchHot = () => api.get('/search/hot', {})
  * @param {Number} offset 偏移数量，用于分页 , 如 : 如 :( 页数 -1)*30, 其中 30 为 limit 的值 , 默认为 0
  * @param {Number} type 1: 单曲, 10: 专辑, 100: 歌手, 1000: 歌单, 1002: 用户, 1004: MV, 1006: 歌词, 1009: 电台, 1014: 视频, 1018:综合
  */
-export const search = (keywords, limit, offset, type) => api.get(`/search?keywords=${keywords}&limit=${limit}&offset=${offset}&type=${type}`, {})
+export const search = (keywords, limit, offset, type) =>
+  api.get(
+    `/search?keywords=${keywords}&limit=${limit}&offset=${offset}&type=${type}`,
+    {}
+  )
 
 /**
  * @method 搜索建议
  * @param {String} keywords 关键词
  */
-export const searchSuggest = keywords => api.get(`/search/suggest?keywords=${keywords}`, {})
+export const searchSuggest = keywords =>
+  api.get(`/search/suggest?keywords=${keywords}`, {})
 
 /**
  * @method 获取推荐歌单
@@ -253,4 +258,5 @@ export const getLyric = id => api.get(`/lyric?id=${id}`, {})
 /**
  * @method 收藏/取消收藏歌单
  */
-export const collectPlaylist = (t, id) => api.get(`/playlist/subscribe?t=${t}&id=${id}`, {})
+export const collectPlaylist = (t, id) =>
+  api.get(`/playlist/subscribe?t=${t}&id=${id}`, {})

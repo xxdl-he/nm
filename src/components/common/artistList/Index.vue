@@ -4,7 +4,12 @@
       <div class="item play-item" @click="playAllSong">
         <i class="iconfont niceOutlined_Play"></i> 播放全部
       </div>
-      <div class="item" @click="collect()" :class="subscribed ? 'active' : ''" v-if="!isPerson">
+      <div
+        class="item"
+        @click="collect()"
+        :class="subscribed ? 'active' : ''"
+        v-if="!isPerson"
+      >
         <i class="iconfont niceicon-heart"></i>
         {{ collectText }}
       </div>
@@ -26,7 +31,11 @@
         <tr
           v-for="(item, index) of songs"
           :key="item.id"
-          :class="index == currentIndex && currentSong.id == item.id && playing ? 'playing' : ''"
+          :class="
+            index == currentIndex && currentSong.id == item.id && playing
+              ? 'playing'
+              : ''
+          "
         >
           <td>
             <div class="index-container flex-center">
@@ -119,7 +128,7 @@ export default {
   components: {},
   computed: {
     ...mapGetters(['currentIndex', 'playing', 'currentSong']),
-    collectText () {
+    collectText() {
       return this.subscribed ? '已收藏' : '收藏'
     }
   },
@@ -133,7 +142,7 @@ export default {
       })
     },
     // 停止播放歌曲
-    pauseSong(item, index) {
+    pauseSong() {
       this.pausePlay()
     },
     // 播放全部

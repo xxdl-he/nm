@@ -19,7 +19,10 @@
               {{ utils.dateFormat(detail.createTime, 'YYYY-MM-DD') }}创建
             </p>
           </div>
-          <div class="tag flex-row" v-if="detail.tags && detail.tags.length > 0">
+          <div
+            class="tag flex-row"
+            v-if="detail.tags && detail.tags.length > 0"
+          >
             标签：<a
               v-for="item of detail.tags"
               :key="item"
@@ -41,7 +44,11 @@
         </div>
       </div>
       <div class="content">
-        <artist-list :songs="songs" @collectArtist="collectArtist" :subscribed="detail.subscribed" />
+        <artist-list
+          :songs="songs"
+          @collectArtist="collectArtist"
+          :subscribed="detail.subscribed"
+        />
       </div>
     </div>
     <div class="right">
@@ -312,7 +319,7 @@ export default {
           this.$message({
             message,
             type: 'success'
-          });
+          })
 
           setTimeout(() => {
             this.getPlayListDetail(this.artistId, 100)
@@ -321,7 +328,6 @@ export default {
       } catch (error) {
         this.$message.error(error)
       }
-      
     },
     // 初始化
     _initialize(id) {
