@@ -53,7 +53,7 @@
           </li>
         </ul>
         <div class="content">
-          <artist-list :songs="songs" v-if="active == 1" />
+          <artist-list :songs="songs" :isPerson="isPerson" v-if="active == 1" />
           <album-list :albums="albums" v-if="active == 2" />
           <mv-list :mvs="mvs" type="mv" v-if="active == 3" />
           <div class="info-box" v-if="active == 4">
@@ -140,7 +140,8 @@ export default {
       // 分页显示条数
       limit: 20,
       // 分页偏移
-      offset: 0
+      offset: 0,
+      isPerson: true
     }
   },
   components: {

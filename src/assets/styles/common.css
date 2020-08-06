@@ -183,6 +183,13 @@
   color: #fa2800;
 }
 
+.el-message-box__message p {
+  margin: 0;
+  line-height: 24px;
+  overflow-y: scroll;
+  max-height: 600px;
+}
+
 @keyframes play {
 	0% {
 		-webkit-transform: translateY(0);

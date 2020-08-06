@@ -114,6 +114,17 @@ export const appRouter = [
         }
       },
       {
+        path: 'album-detail',
+        meta: {
+          title: '详情',
+          keepAlive: true
+        },
+        name: 'albumDetail',
+        component: resolve => {
+          require(['@/views/album/Index.vue'], resolve)
+        }
+      },
+      {
         path: 'video',
         meta: {
           title: '视频',
