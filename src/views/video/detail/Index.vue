@@ -5,6 +5,7 @@
         <video
           :src="videoUrl"
           controls="controls"
+          autoplay
           controlslist="nodownload"
         ></video>
       </div>

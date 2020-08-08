@@ -326,7 +326,7 @@ export default {
           overflow: hidden;
           padding: 3rem;
           .bg-effect {
-            background-image: url(../../../assets/images/ad.jpg);
+            background-image: url(../../../assets/images/personal.jpg);
             background-size: cover;
             background-repeat: no-repeat;
             background-position: center;
@@ -335,15 +335,15 @@ export default {
             left: 0;
             right: 0;
             bottom: 0;
-            filter: blur(5px);
+            filter: blur(8px);
             transform: scale(1.05);
             background-position: center;
             .layer {
               width: 100%;
               height: 100%;
-              background-color: rgba(22, 29, 39, .66);
+              background-color: rgba(0, 0, 0, .3);
               position: absolute;
-              opacity: 0;
+              opacity: 1;
               top: 0;
               left: 0;
               transition: opacity 0.3s ease-in-out;

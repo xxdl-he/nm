@@ -12,7 +12,11 @@
           />
           <i class="iconfont nicesearch-o search-icon" @click="search(1)"></i>
         </div>
-        <div class="list" :class="!isKeyword ? 'hot' : ''" v-if="a">
+        <div
+          class="list"
+          :class="!isKeyword ? 'hot' : ''"
+          style="display: none;"
+        >
           <div
             class="item"
             v-if="searchResult.songs && searchResult.songs.length > 0"
@@ -172,7 +176,7 @@ export default {
         .then(res => {
           if (res.code === 200) {
             switch (type) {
-              case 1:
+              case 1: {
                 let lists = res.result.songs
                 let sliceArr = []
                 lists.map(item => {
@@ -180,19 +184,32 @@ export default {
                 })
                 this.getSongDetail(sliceArr)
                 break
-              case 100:
+              }
+              case 100: {
                 this.singers = res.result.artists
                 break
-              case 10:
+              }
+              case 10: {
                 this.albums = res.result.albums
                 break
-              case 1014:
+              }
+              case 1014: {
                 this.videos = this._normalizeVideos(res.result.videos)
                 break
-              case 1000:
+              }
+              case 1000: {
                 this.playList = res.result.playlists
                 break
-              default:
+              }
+              default: {
+                let lists = res.result.songs
+                let sliceArr = []
+                lists.map(item => {
+                  sliceArr.push(item.id)
+                })
+                this.getSongDetail(sliceArr)
+                break
+              }
             }
           }
         })

@@ -19,9 +19,7 @@
               {{ utils.dateFormat(detail.publishTime, 'YYYY-MM-DD') }}创建
             </p>
           </div>
-          <div class="tag flex-row">
-            发行公司：{{detail.company}}
-          </div>
+          <div class="tag flex-row">发行公司：{{ detail.company }}</div>
           <div class="desc">
             <p class="ellipsis-two" v-html="detail.description"></p>
             <span
@@ -160,7 +158,7 @@ export default {
       }
     },
     // 获取歌手专辑
-    async getArtistAlbum(id) {
+    async getArtistAlbum() {
       let params = {
         id: this.creator.id,
         limit: 5,

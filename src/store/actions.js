@@ -36,3 +36,11 @@ export const playAll = function({ commit }, { list }) {
 export const pausePlay = function({ commit }) {
   commit(types.SET_PLAYING_STATE, false)
 }
+
+// 移除播放
+export const stopPlay = function({ commit }) {
+  commit(types.SET_PLAYING_STATE, false)
+  commit(types.SET_PLAYLIST, [])
+  commit(types.SET_SEQUENCE_LIST, [])
+  commit(types.SET_CURRENT_INDEX, -1)
+}

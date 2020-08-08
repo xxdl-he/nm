@@ -29,7 +29,7 @@
               class="play flex-center"
               title="播放"
               v-if="!item.isLive"
-              @click="toDetail(item.id)"
+              @click="toDetail(item.id, item.type)"
             >
               <i class="iconfont nicebofang1"></i>
             </button>
@@ -53,12 +53,13 @@
       </li>
     </ul>
     <div v-if="loadStatus" class="load-bottom">
-      <loading />
+      <nice-loading />
     </div>
   </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
   data() {
     return {}
@@ -95,7 +96,8 @@ export default {
     },
     // 视频详情
     toDetail(id) {
-      if (this.type == 'mv') {
+      this.stopPlay()
+      if (typeof id == 'number' || id.length < 10) {
         this.$router.push({
           name: 'mvDetail',
           query: {
@@ -110,7 +112,11 @@ export default {
           }
         })
       }
-    }
+    },
+    ...mapActions([
+      // 播放视频移除播放
+      'stopPlay'
+    ])
   },
   created() {},
   mounted() {}

@@ -23,7 +23,7 @@
             </div>
             <div class="count">
               <i class="arrow"></i>
-              <span>{{ item.subType }}</span>
+              <span>{{ item.subType || item.type }}</span>
             </div>
             <div class="action">
               <button class="play flex-center" title="播放">
@@ -42,7 +42,7 @@
       </li>
     </ul>
     <div v-if="loadStatus" class="load-bottom">
-      <loading />
+      <nice-loading />
     </div>
   </div>
 </template>

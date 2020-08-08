@@ -7,7 +7,7 @@ import utils from '@/utils/utils'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 import infiniteScroll from 'vue-infinite-scroll'
 // import VueMouseParallax from 'vue-mouse-parallax'
-import Loading from '@/components/common/loading/Index.vue'
+import niceLoading from '@/components/common/loading/Index.vue'
 import 'swiper/css/swiper.css'
 import '@/assets/styles/reset.styl'
 import '@/assets/styles/common.css'
@@ -31,7 +31,8 @@ import {
   TableColumn,
   Popover,
   Tooltip,
-  Slider
+  Slider,
+  Loading
 } from 'element-ui'
 Vue.use(Avatar)
   .use(Image)
@@ -50,6 +51,7 @@ Vue.use(Avatar)
   .use(Popover)
   .use(Tooltip)
   .use(Slider)
+  .use(Loading)
 Vue.config.productionTip = false
 Vue.prototype.$api = getApi
 Vue.prototype.utils = utils
@@ -62,7 +64,7 @@ Vue.prototype.$confirm = MessageBox.confirm
 Vue.prototype.$prompt = MessageBox.prompt
 Vue.prototype.$notify = Notification
 Vue.prototype.$message = Message
-Vue.component('Loading', Loading)
+Vue.component('niceLoading', niceLoading)
 // button阻止重复点击
 Vue.directive('preventReClick', {
   inserted(el, binding) {

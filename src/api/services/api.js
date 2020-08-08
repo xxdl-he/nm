@@ -264,11 +264,9 @@ export const collectPlaylist = (t, id) =>
 /**
  * @method 获取专辑内容
  */
-export const getAlbumData = (id) =>
-  api.get(`/album?id=${id}`, {})
+export const getAlbumData = id => api.get(`/album?id=${id}`, {})
 
 /**
  * @method 获取专辑评论
  */
-export const getAlbumComment = params =>
-  api.get(`/comment/album`, { params })
+export const getAlbumComment = params => api.get(`/comment/album`, { params })
