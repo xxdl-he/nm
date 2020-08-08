@@ -3,6 +3,10 @@
 ## 感谢
 [Binaryify/NeteaseCloudMusicApi](https://github.com/Binaryify/NeteaseCloudMusicApi)
 
+## 预览地址
+[vue-desktop-nicemusic](http://nicenav.cn/desktop-music)
+![Image text](https://image-static.segmentfault.com/186/150/1861508309-5f2a2058d2596_articlex)
+
 ## 目录结构
 ##### | --dist 生成打包后的文件
 ##### | --node_modules 安装的依赖包
