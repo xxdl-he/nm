@@ -25,3 +25,11 @@
 ##### |   |--views 所有的路由组件
 ##### |   |--app.vue 顶层路由
 ##### |   |--main.js 入口文件
+
+## 安装运行
+```shell
+$ git clone git@gitee.com:lxhcool/desktop-nicemusic.git
+$ cd desktop-nicemusic
+$ npm install
+$ npm run serve
+```
