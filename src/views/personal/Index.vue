@@ -14,7 +14,8 @@
             </div>
             <div class="info flex-between">
               <p class="name">{{ userInfo.nickname }}</p>
-              <button class="sign-btn">签到</button>
+              <button class="sign-btn sign-btn-active" v-if="!userDetail.pcSign">签到</button>
+              <button class="sign-btn" v-else>已签到</button>
             </div>
           </div>
           <p class="desc">{{ userInfo.signature }}</p>
@@ -44,9 +45,9 @@
             </div>
           </div>
           <ul class="follow">
-            <li>动态<span>0</span></li>
-            <li>关注<span>0</span></li>
-            <li>粉丝<span>0</span></li>
+            <li>动态<span>{{ userInfo.eventCount }}</span></li>
+            <li>关注<span>{{ userInfo.newFollows }}</span></li>
+            <li>粉丝<span>{{ userInfo.followeds }}</span></li>
           </ul>
           <div class="foot flex-center">
             <router-link tag="a" to="/">个人设置</router-link>
@@ -105,6 +106,7 @@ export default {
       songs: [],
       num: 2,
       type: 1,
+      userDetail: {},
       isPerson: true
     }
   },
@@ -151,6 +153,17 @@ export default {
     changeType(type) {
       this.type = type
       this.getUserRecord()
+    },
+    // 获取用户信息
+    async getUserDetail() {
+      try {
+        let res = await this.$api.getUserDetail(this.userInfo.userId)
+        if (res.code === 200) {
+          this.userDetail = res
+        }
+      } catch (error) {
+        console.log(error)
+      }
     },
     // 获取用户播放记录
     async getUserRecord() {
@@ -204,9 +217,9 @@ export default {
   },
   created() {},
   mounted() {
-    console.log(this.userInfo)
     this.getArea()
     this.getUserRecord()
+    this.getUserDetail()
     this.getUserArtist()
   }
 }
@@ -268,13 +281,15 @@ export default {
               font-size: 16px;
             }
             .sign-btn {
-              padding: 2px 15px;
+              padding: 3px 15px;
               font-size: 12px;
-              background: #fa2800;
-              color: #fff;
-              border: 1px solid #fa2800;
-              cursor: pointer;
+              color: #fff;              
               border-radius: 30px;
+              &.sign-btn-active {
+                background: #fa2800;
+                cursor: pointer;
+                border: 1px solid #fa2800;
+              }
             }
           }
         }
