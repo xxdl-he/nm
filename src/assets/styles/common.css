@@ -201,6 +201,23 @@
   color: #4a4a4a;
 }
 
+.el-dropdown-menu__item .el-icon-user {
+  margin-right: 2px;
+}
+
+.el-dropdown-menu__item .el-icon-switch-button {
+  margin-right: 2px;
+}
+
+.el-dropdown-menu__item:focus, .el-dropdown-menu__item:not(.is-disabled):hover {
+  background-color: #ffffff;
+  color: #fa2800;
+}
+
+.no-data-text {
+  padding-bottom: 10px;
+}
+
 @keyframes play {
 	0% {
 		-webkit-transform: translateY(0);

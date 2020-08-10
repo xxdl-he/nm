@@ -361,14 +361,14 @@ export default {
               display: block;
             }
           }
-          .duration-container {
-            p {
-              display: none;
-            }
-            .song-tools {
-              display: flex;
-            }
-          }
+          // .duration-container {
+          //   p {
+          //     display: none;
+          //   }
+          //   .song-tools {
+          //     display: flex;
+          //   }
+          // }
           &.playing {
             .index-container {
               .play-btn {

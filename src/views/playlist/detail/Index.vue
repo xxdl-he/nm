@@ -15,7 +15,7 @@
               <img :src="creator.avatarUrl + '?param=100y100'" alt="" />
             </div>
             <p class="nickname">{{ creator.nickname }}</p>
-            <p class="createTime">
+            <p class="createTime" v-if="detail.createTime"> 
               {{ utils.dateFormat(detail.createTime, 'YYYY-MM-DD') }}创建
             </p>
           </div>
@@ -43,21 +43,21 @@
           </div>
         </div>
       </div>
-      <div class="content">
+      <div class="content" v-loading="loading">
         <artist-list
           :songs="songs"
-          :isPerson="true"
+          :isPerson="ordered ? true : false"
           @collectArtist="collectArtist"
           :subscribed="detail.subscribed"
         />
       </div>
     </div>
     <div class="right">
-      <div class="like module shadow">
+      <div class="like module shadow" v-if="!ordered">
         <div class="card-header flex-row">
           <span>喜欢这个歌单的人</span>
         </div>
-        <ul>
+        <ul v-if="subscribers.length > 0">
           <li v-for="item of subscribers" :key="item.id">
             <div class="avatar">
               <img
@@ -68,6 +68,7 @@
             </div>
           </li>
         </ul>
+        <p class="no-data-text" v-else style="padding-bottom: 10px;">还没有人喜欢</p>
       </div>
       <div class="related module shadow">
         <div class="card-header flex-row">
@@ -95,11 +96,11 @@
           </li>
         </ul>
       </div>
-      <div class="comment module shadow">
+      <div class="comment module shadow" v-if="!ordered">
         <div class="card-header flex-row">
           <span>精彩评论</span>
         </div>
-        <ul>
+        <ul v-if="comments.length > 0">
           <li class="item" v-for="item of comments" :key="item.time">
             <div class="avatar">
               <img
@@ -117,6 +118,7 @@
             </div>
           </li>
         </ul>
+        <p class="no-data-text" v-else style="padding-bottom: 10px;">还没有人评论</p>
       </div>
     </div>
   </div>
@@ -144,7 +146,10 @@ export default {
       songs: [],
       // 收藏这个歌单的人数量
       s: 32,
-      artistId: ''
+      artistId: '',
+      loading: false,
+      // 是否是我喜欢的歌单
+      ordered: false
     }
   },
   components: {
@@ -183,11 +188,14 @@ export default {
       let timestamp = new Date().valueOf()
       try {
         let res = await this.$api.getPlayListDetail(id, s, timestamp)
+        console.log(res)
         if (res.code === 200) {
-          res.playlist.description = res.playlist.description.replace(
-            /(\r\n|\n|\r)/gm,
-            '<br />'
-          )
+          if(res.playlist.description !== null) {
+            res.playlist.description = res.playlist.description.replace(
+              /(\r\n|\n|\r)/gm,
+              '<br />'
+            )
+          }
           this.detail = res.playlist
           this.creator = res.playlist.creator
           let trackIds = res.playlist.trackIds
@@ -200,11 +208,12 @@ export default {
           this.getSongDetail(sliceArr)
         }
       } catch (error) {
-        this.$message.error('error')
+        // this.$message.error(error)
       }
     },
     // 获取歌曲列表
     async getSongDetail(sliceArr) {
+      this.loading = true
       let before = sliceArr[0]
       let after = sliceArr[1]
       let timestamp = new Date().valueOf()
@@ -231,8 +240,9 @@ export default {
           let res = beforeRes.songs
           this.songs = this._normalizeSongs(res)
         }
+        this.loading = false
       } catch (error) {
-        this.$message.error('error')
+        // this.$message.error(error)
       }
     },
     // 获取相关歌单推荐
@@ -243,7 +253,7 @@ export default {
           this.relatedList = res.playlists
         }
       } catch (error) {
-        this.$message.error('error')
+        // this.$message.error(error)
       }
     },
     // 获取歌单收藏者
@@ -259,7 +269,7 @@ export default {
           this.subscribers = res.subscribers
         }
       } catch (error) {
-        this.$message.error('error')
+        // this.$message.error(error)
       }
     },
     // 获取评论
@@ -279,7 +289,7 @@ export default {
           }
         }
       } catch (error) {
-        this.$message.error('error')
+        // this.$message.error(error)
       }
     },
     // 处理歌曲
@@ -327,7 +337,7 @@ export default {
           }, 300)
         }
       } catch (error) {
-        this.$message.error(error)
+        // this.$message.error(error)
       }
     },
     // 初始化
@@ -341,9 +351,14 @@ export default {
   created() {},
   mounted() {
     let id = this.$route.query.id
+    let ordered = this.$route.query.ordered
+    if(ordered === 'true') {
+      ordered = true
+    }
     this.artistId = id
     if (id) {
       this._initialize(id)
+      this.ordered = ordered
     }
   }
 }

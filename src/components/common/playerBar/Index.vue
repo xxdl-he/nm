@@ -5,8 +5,8 @@
         <img :src="currentSong.image" alt="nicemusic" />
       </div>
       <div class="info">
-        <h2>{{ currentSong.name }}</h2>
-        <p>{{ currentSong.singer }}</p>
+        <h2 class="ellipsis">{{ currentSong.name }}</h2>
+        <p class="ellipsis">{{ currentSong.singer }}</p>
       </div>
       <div class="player-btn">
         <i class="iconfont icon-prev niceshangyishou" @click="prevSong"></i>
@@ -44,7 +44,6 @@
         </div>
       </div>
       <div class="tool">
-        <i class="iconfont icon-like nicecollection"></i>
         <i class="iconfont" :class="modeIcon" @click="changeMode"></i>
         <i class="iconfont nicegeci32" @click="openLyric"></i>
         <i class="iconfont nicebofangliebiao24"></i>
@@ -445,8 +444,9 @@ export default {
     }
   }
   .info {
-    margin-right: 55px;
+    margin-right: 15px;
     flex-shrink: 0;
+    width: 120px;
     h2 {
       font-size: 14px;
       color: #333;

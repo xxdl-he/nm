@@ -2,7 +2,7 @@
   <div class="header shadow">
     <div class="container flex-row">
       <div class="logo">
-        <a href="index.html"></a>
+        <router-link :to="{ name: 'home' }" tag="a"></router-link>
       </div>
       <ul class="nav flex-row">
         <li>

@@ -5,7 +5,7 @@
       :class="numClass"
       v-for="item of sheetList"
       :key="item.id"
-      @click="toDetail(item.id)"
+      @click="toDetail(item)"
     >
       <div class="wrapper">
         <a>
@@ -67,12 +67,16 @@ export default {
   },
   watch: {},
   methods: {
-    toDetail(id) {
+    toDetail(item) {
+      let query = {
+        id: item.id
+      }
+      if(item.ordered) {
+        query.ordered = item.ordered
+      }
       this.$router.push({
         name: 'playlistDetail',
-        query: {
-          id
-        }
+        query
       })
     }
   },
