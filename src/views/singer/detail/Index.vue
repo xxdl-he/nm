@@ -71,13 +71,14 @@
             </div>
           </div>
           <div class="simi-box" v-if="active == 5">
-            <ul class="singer-list">
+            <ul class="singer-list" v-if="singers.length > 0">
               <singer-item
                 v-for="item of singers"
                 :key="item.id"
                 :item="item"
               />
             </ul>
+            <nice-empty v-else></nice-empty>
           </div>
         </div>
       </div>

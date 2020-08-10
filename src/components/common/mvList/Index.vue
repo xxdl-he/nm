@@ -1,6 +1,6 @@
 <template>
   <div class="mv-box">
-    <ul class="mv-list">
+    <ul class="mv-list" v-if="mvs.length > 0">
       <li v-for="item of mvs" :key="item.id" :class="item.isLive ? 'live' : ''">
         <div class="cover">
           <div class="image">
@@ -52,6 +52,7 @@
         </div>
       </li>
     </ul>
+    <nice-empty v-else></nice-empty>
     <div v-if="loadStatus" class="load-bottom">
       <nice-loading />
     </div>

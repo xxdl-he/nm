@@ -8,6 +8,7 @@ import VueAwesomeSwiper from 'vue-awesome-swiper'
 import infiniteScroll from 'vue-infinite-scroll'
 // import VueMouseParallax from 'vue-mouse-parallax'
 import niceLoading from '@/components/common/loading/Index.vue'
+import niceEmpty from '@/components/common/empty/Index.vue'
 import 'swiper/css/swiper.css'
 import '@/assets/styles/reset.styl'
 import '@/assets/styles/common.css'
@@ -65,6 +66,7 @@ Vue.prototype.$prompt = MessageBox.prompt
 Vue.prototype.$notify = Notification
 Vue.prototype.$message = Message
 Vue.component('niceLoading', niceLoading)
+Vue.component('niceEmpty', niceEmpty)
 // button阻止重复点击
 Vue.directive('preventReClick', {
   inserted(el, binding) {
