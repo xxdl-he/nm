@@ -42,6 +42,12 @@ export const getPersonalized = limit =>
 export const getNewSongs = () => api.get(`/personalized/newsong`, {})
 
 /**
+ * @method 获取热门歌手
+ */
+export const getHotSinger = () => api.get(`/top/artists?offset=0&limit=30`, {})
+
+
+/**
  * @method 获取歌手分类列表
  * @params cat 即 category Code,歌手类型,默认 1001,返回华语男歌手数据
  * @params limit 返回数量 , 默认为30
