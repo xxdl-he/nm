@@ -1,5 +1,5 @@
 import { playMode } from '@/common/playConfig.js'
-
+import { getSearch } from '@/common/cache'
 const state = {
   // 是否登录
   loginStatu: null,
@@ -16,7 +16,9 @@ const state = {
   // 播放模式(循环，单曲，随机)
   mode: playMode.sequence,
   // 播放索引
-  currentIndex: -1
+  currentIndex: -1,
+  // 搜索历史
+  searchHistory: getSearch()
 }
 
 export default state

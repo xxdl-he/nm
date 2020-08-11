@@ -39,6 +39,11 @@ const mutations = {
   // 播放索引
   [types.SET_CURRENT_INDEX](state, index) {
     state.currentIndex = index
+  },
+
+  // 搜索历史
+  [types.SET_SEARCH_HISTORY](state, history) {
+    state.searchHistory = history
   }
 }
 

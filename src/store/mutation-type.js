@@ -21,3 +21,6 @@ export const SET_PLAY_MODE = 'SET_PLAY_MODE'
 
 // 设置播放索引
 export const SET_CURRENT_INDEX = 'SET_CURRENT_INDEX'
+
+// 设置搜索历史
+export const SET_SEARCH_HISTORY = 'SET_SEARCH_HISTORY'

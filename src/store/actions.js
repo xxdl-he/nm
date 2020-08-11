@@ -1,6 +1,7 @@
 import * as types from './mutation-type'
 import { playMode } from '@/common/playConfig'
 import utils from '@/utils/utils'
+import { saveSearch, deleteSearch, clearSearch } from '@/common/cache'
 
 function findIndex(list, song) {
   return list.findIndex(item => {
@@ -43,4 +44,19 @@ export const stopPlay = function({ commit }) {
   commit(types.SET_PLAYLIST, [])
   commit(types.SET_SEQUENCE_LIST, [])
   commit(types.SET_CURRENT_INDEX, -1)
+}
+
+// 保存搜索历史
+export const saveSearchHistory = function({ commit }, query) {
+  commit(types.SET_SEARCH_HISTORY, saveSearch(query))
+}
+
+// 移除单个搜索历史
+export const deleteSearchHistory = function({ commit }, query) {
+  commit(types.SET_SEARCH_HISTORY, deleteSearch(query))
+}
+
+// 移除单个搜索历史
+export const clearSearchHistory = function({ commit }) {
+  commit(types.SET_SEARCH_HISTORY, clearSearch())
 }

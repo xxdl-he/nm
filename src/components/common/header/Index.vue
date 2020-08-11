@@ -72,23 +72,24 @@
                 />
               </div>
             </div>
-            <!-- <div class="search-hot">
+            <div class="search-hot" v-show="searchHistory.length">
               <div class="title flex-row">
                 <i class="iconfont nicelishi"></i>
                 <span>历史搜索</span>
+                <p @click="clearSearch">清空</p>
               </div>
               <ul class="tags">
-                <li v-for="item of hots" :key="item.first">
-                  <a class="btn">{{ item.first }}</a>
+                <li v-for="item of searchHistory" :key="item">
+                  <a class="btn flex-row" @click="tag(item)">{{ item }} <span class="close-dark" @click.stop="deleteItem(item)"></span></a>
                 </li>
               </ul>
-            </div> -->
+            </div>
             <div class="search-hot">
               <div class="title flex-row">
                 <i class="iconfont niceremensousuo"></i>
                 <span>热门搜索</span>
               </div>
-              <ul class="tags">
+              <ul class="tags" v-if="hots.length > 0">
                 <li v-for="item of hots" :key="item.first">
                   <a class="btn" @click="tag(item.first)">{{ item.first }}</a>
                 </li>
@@ -105,12 +106,13 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   data() {
     return {
       keyword: '',
       hots: [],
+      historys: [],
       searchOpenClass: '',
       searchCloseClass: ''
     }
@@ -118,7 +120,7 @@ export default {
   components: {},
   //监听属性 类似于data概念
   computed: {
-    ...mapGetters(['userInfo', 'loginStatu'])
+    ...mapGetters(['userInfo', 'loginStatu', 'searchHistory'])
   },
   //监控data中的数据变化
   watch: {},
@@ -128,7 +130,6 @@ export default {
     openSearchPop() {
       this.searchOpenClass = 'open'
       this.searchCloseClass = ''
-      this.getSearchHot()
     },
     // 关闭搜索框
     closeSearchPop() {
@@ -145,9 +146,12 @@ export default {
             keyword: this.keyword
           }
         })
+        this.saveSearchHistory(this.keyword)
       }
     },
+    // 点击标签搜索
     tag(keyword) {
+      this.saveSearchHistory(keyword)
       this.closeSearchPop()
       this.$router.push({
         name: 'search',
@@ -155,6 +159,14 @@ export default {
           keyword
         }
       })
+    },
+    // 删除历史搜索单个
+    deleteItem(item) {
+      this.deleteSearchHistory(item)
+    },
+    // 清空搜索历史
+    clearSearch() {
+      this.clearSearchHistory()
     },
     // 获取热搜列表
     async getSearchHot() {
@@ -179,12 +191,19 @@ export default {
           name: 'personal'
         })
       }
-    }
+    },
+    ...mapActions([
+      'saveSearchHistory',
+      'deleteSearchHistory',
+      'clearSearchHistory'
+    ])
   },
   //生命周期 - 创建完成（可以访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
-  mounted() {}
+  mounted() {
+    this.getSearchHot()
+  }
 }
 </script>
 <style lang="stylus" scoped>
@@ -393,8 +412,16 @@ export default {
               font-size: 1.625rem;
               margin-right: 8px;
             }
+            .nicelishi {
+              font-size: 1.425rem;
+            }
             span {
               font-size: 15px;
+              flex: 1;
+            }
+            p {
+              color: $color-theme;
+              cursor: pointer;
             }
           }
           .tags {
@@ -407,7 +434,7 @@ export default {
               padding: 0.25rem;
               cursor: pointer;
               .btn {
-                display: block;
+                display: flex;
                 font-weight: 400;
                 color: #6D7685;
                 background-color: #f4f4f5;
@@ -421,8 +448,23 @@ export default {
                 border-radius: .25rem;
                 transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
                 border-radius: 4px;
+                .close-dark {
+                  display: inline-block;
+                  background-image: url('../../../assets/images/close-dark.svg');
+                  background-size: contain;
+                  background-position: center;
+                  background-repeat: no-repeat;
+                  vertical-align: middle;
+                  width: 14px;
+                  height: 14px;
+                  margin-left: 8px;
+                  opacity: 0.7;
+                }
                 &:hover {
                   color: #161E27;
+                  .close-dark {
+                    opacity: 1;
+                  }
                 }
               }
             }

@@ -153,6 +153,12 @@ export default {
       this.timer = setTimeout(() => {
         this.searchSuggest()
       }, 100)
+    },
+    $route(newObj, oldObj) {
+      if(newObj.query.keyword !== oldObj.query.keyword) {
+        this.keyword = newObj.query.keyword
+        this.search(1)
+      }
     }
   },
   methods: {
