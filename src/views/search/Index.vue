@@ -90,10 +90,9 @@
         <a :class="type === 1000 ? 'active' : ''" @click="changeType(1000)"
           >歌单</a
         >
-        <!-- <a>用户</a> -->
       </div>
       <div class="content">
-        <artist-list :songs="songs" :isPerson="isPerson" v-if="type === 1" />
+        <artist-list :songs="songs" :isPerson="isPerson" v-if="type === 1" v-loading="loading" />
         <ul class="singer-list" v-if="type === 100">
           <singer-item v-for="item of singers" :key="item.id" :item="item" />
         </ul>
@@ -126,7 +125,8 @@ export default {
       singers: [],
       albums: [],
       videos: [],
-      playList: []
+      playList: [],
+      loading: false
     }
   },
   components: {
@@ -225,12 +225,14 @@ export default {
     },
     // 获取歌曲列表
     async getSongDetail(sliceArr) {
+      this.loading = true
       let timestamp = new Date().valueOf()
       let ids = sliceArr.join(',')
       try {
         let beforeRes = await this.$api.getSongDetail(ids, timestamp)
         let res = beforeRes.songs
         this.songs = this._normalizeSongs(res)
+        this.loading = false
       } catch (error) {
         this.$message.error('error')
       }
