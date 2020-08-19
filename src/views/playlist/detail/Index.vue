@@ -11,10 +11,10 @@
             <div></div>
           </div>
           <div class="user flex-row">
-            <div class="avatar">
+            <div class="avatar" @click="toUser(creator.userId)">
               <img :src="creator.avatarUrl + '?param=100y100'" alt="" />
             </div>
-            <p class="nickname">{{ creator.nickname }}</p>
+            <p class="nickname" @click="toUser(creator.userId)">{{ creator.nickname }}</p>
             <p class="createTime" v-if="detail.createTime"> 
               {{ utils.dateFormat(detail.createTime, 'YYYY-MM-DD') }}创建
             </p>
@@ -53,13 +53,13 @@
       </div>
     </div>
     <div class="right">
-      <div class="like module shadow" v-if="!ordered">
+      <div class="like module shadow">
         <div class="card-header flex-row">
           <span>喜欢这个歌单的人</span>
         </div>
         <ul v-if="subscribers.length > 0">
-          <li v-for="item of subscribers" :key="item.id">
-            <div class="avatar">
+          <li v-for="item of subscribers" :key="item.userId">
+            <div class="avatar" @click="toUser(item.userId)">
               <img
                 :src="item.avatarUrl + '?param=150y150'"
                 :alt="item.nickname"
@@ -96,13 +96,13 @@
           </li>
         </ul>
       </div>
-      <div class="comment module shadow" v-if="!ordered">
+      <div class="comment module shadow">
         <div class="card-header flex-row">
           <span>精彩评论</span>
         </div>
         <ul v-if="comments.length > 0">
           <li class="item" v-for="item of comments" :key="item.time">
-            <div class="avatar">
+            <div class="avatar" @click="toUser(item.user.userId)">
               <img
                 :src="item.user.avatarUrl + '?param=150y150'"
                 :alt="item.user.nickname"
@@ -110,7 +110,7 @@
               />
             </div>
             <div class="info">
-              <h2>
+              <h2 @click="toUser(item.user.userId)">
                 {{ item.user.nickname
                 }}<small> · {{ utils.formatMsgTime(item.time) }}</small>
               </h2>
@@ -311,15 +311,6 @@ export default {
         dangerouslyUseHTMLString: true
       })
     },
-    // 相关推荐详情
-    toDetail(id) {
-      this.$router.push({
-        name: 'playlistDetail',
-        query: {
-          id
-        }
-      })
-    },
     // 收藏歌单
     async collectArtist() {
       let t = this.detail.subscribed ? 2 : 1
@@ -340,6 +331,23 @@ export default {
         // this.$message.error(error)
       }
     },
+    // 相关推荐详情
+    toDetail(id) {
+      this.$router.push({
+        name: 'playlistDetail',
+        query: {
+          id
+        }
+      })
+    },
+    toUser(id) {
+      this.$router.push({
+        name: 'personal',
+        query: {
+          id
+        }
+      })
+    },
     // 初始化
     _initialize(id) {
       this.getPlayListDetail(id, 100)
@@ -351,14 +359,9 @@ export default {
   created() {},
   mounted() {
     let id = this.$route.query.id
-    let ordered = this.$route.query.ordered
-    if(ordered === 'true') {
-      ordered = true
-    }
     this.artistId = id
     if (id) {
       this._initialize(id)
-      this.ordered = ordered
     }
   }
 }
@@ -445,6 +448,7 @@ export default {
             border-radius: 50%;
             position: relative;
             margin-right: 15px;
+            cursor: pointer;
             img {
               width: 100%;
               height: 100%;
@@ -455,6 +459,10 @@ export default {
           .nickname {
             font-size: 14px;
             margin-right: 30px;
+            cursor: pointer;
+            &:hover {
+              color: $color-theme;
+            }
           }
           .createTime {
             font-size: 14px;
@@ -569,6 +577,7 @@ export default {
             border-radius: 50%;
             margin-right: 12px;
             flex-shrink: 0;
+            cursor: pointer;
             img {
               width: 100%;
               border-radius: 50%;
@@ -580,6 +589,7 @@ export default {
               font-size: 15px;
               margin-right: 5px;
               margin-bottom: 10px;
+              cursor: pointer;
               small {
                 font-size: 12px;
                 color: #a5a5c1;

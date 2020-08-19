@@ -24,3 +24,6 @@ export const SET_CURRENT_INDEX = 'SET_CURRENT_INDEX'
 
 // 设置搜索历史
 export const SET_SEARCH_HISTORY = 'SET_SEARCH_HISTORY'
+
+// 设置收藏列表
+export const SET_HISTORY_LIST = 'SET_HISTORY_LIST'

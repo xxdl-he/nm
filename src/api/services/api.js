@@ -257,6 +257,12 @@ export const getMvUrl = id => api.get(`/mv/url?id=${id}`, {})
 export const getMvComments = params => api.get(`/comment/mv`, { params })
 
 /**
+ * @method 相似mv
+ */
+export const getMvRelated = id => api.get(`/simi/mv?mvid=${id}`, {})
+
+
+/**
  * @method 获取歌词
  */
 export const getLyric = id => api.get(`/lyric?id=${id}`, {})

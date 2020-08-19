@@ -31,8 +31,7 @@
         <tr
           v-for="(item, index) of songs"
           :key="item.id"
-          :class="
-            index == currentIndex && currentSong.id == item.id && playing
+          :class="currentSong.id == item.id && playing
               ? 'playing'
               : ''
           "

@@ -142,7 +142,8 @@ export default {
     }
   },
   watch: {
-    keyword() {
+    keyword(newVal, oldVal) {
+      console.log(newVal, oldVal)
       if (this.timer) {
         clearTimeout(this.timer)
       }
@@ -152,6 +153,7 @@ export default {
       }
       this.timer = setTimeout(() => {
         this.searchSuggest()
+        this.search(this.type)
       }, 100)
     },
     $route(newObj, oldObj) {
@@ -170,7 +172,7 @@ export default {
     // 搜索建议
     async searchSuggest() {
       let res = await this.$api.searchSuggest(this.keyword)
-      console.log(res)
+      // console.log(res)
       if (JSON.stringify(res.result) !== '{}') {
         this.searchResult = res.result
       }

@@ -37,3 +37,11 @@ export const currentSong = state => {
 export const searchHistory = state => {
   return state.searchHistory
 }
+
+// 收藏列表
+export const historyList = (state) => {
+  // return state.historyList.map(song => {
+  //   return new song(song)
+  // })
+  return state.historyList
+}

@@ -68,11 +68,9 @@ export default {
   watch: {},
   methods: {
     toDetail(item) {
+      console.log(item)
       let query = {
         id: item.id
-      }
-      if(item.ordered) {
-        query.ordered = item.ordered
       }
       this.$router.push({
         name: 'playlistDetail',

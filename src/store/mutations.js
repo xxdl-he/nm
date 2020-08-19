@@ -44,6 +44,11 @@ const mutations = {
   // 搜索历史
   [types.SET_SEARCH_HISTORY](state, history) {
     state.searchHistory = history
+  },
+
+  // 收藏列表
+  [types.SET_HISTORY_LIST](state, list) {
+    state.historyList = list
   }
 }
 

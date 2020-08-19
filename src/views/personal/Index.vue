@@ -6,36 +6,38 @@
         <div class="user-box shadow">
           <div
             class="background layer"
-            :style="{ backgroundImage: 'url(' + userInfo.backgroundUrl + ')' }"
+            :style="{ backgroundImage: 'url(' + userProfile.backgroundUrl + ')' }"
           ></div>
           <div class="card flex-row">
             <div class="avatar">
-              <img :src="userInfo.avatarUrl" />
+              <img :src="userProfile.avatarUrl" />
             </div>
             <div class="info flex-between">
-              <p class="name">{{ userInfo.nickname }}</p>
-              <button class="sign-btn sign-btn-active" v-if="!userDetail.pcSign">签到</button>
-              <button class="sign-btn" v-else>已签到</button>
+              <p class="name">{{ userProfile.nickname }}</p>
+              <div v-if="userInfo.userId === userProfile.userId">
+                <button class="sign-btn sign-btn-active" v-if="!userDetail.pcSign">签到</button>
+                <button class="sign-btn" v-else>已签到</button>
+              </div>
             </div>
           </div>
-          <p class="desc">{{ userInfo.signature }}</p>
+          <p class="desc">{{ userDetail.signature }}</p>
           <div class="profile">
             <div class="tag">
               等级：
               <i
                 class="iconfont lv-icon"
-                :class="'nicelevel-' + userInfo.djStatus"
+                :class="'nicelevel-' + userDetail.level"
               ></i>
             </div>
             <div class="tag">
               年龄：
               <span>{{ age }}</span>
               <i
-                v-if="userInfo.gender === 1"
+                v-if="userProfile.gender === 1"
                 class="iconfont niceCRM_icon_nanxing sex-icon men"
               ></i>
               <i
-                v-if="userInfo.gender === 2"
+                v-if="userProfile.gender === 2"
                 class="iconfont niceCRM_icon_nvxing sex-icon women"
               ></i>
             </div>
@@ -45,11 +47,11 @@
             </div>
           </div>
           <ul class="follow">
-            <li>动态<span>{{ userInfo.eventCount }}</span></li>
-            <li>关注<span>{{ userInfo.newFollows }}</span></li>
-            <li>粉丝<span>{{ userInfo.followeds }}</span></li>
+            <li>动态<span>{{ userProfile.eventCount }}</span></li>
+            <li>关注<span>{{ userProfile.newFollows }}</span></li>
+            <li>粉丝<span>{{ userProfile.followeds }}</span></li>
           </ul>
-          <div class="foot flex-center">
+          <div class="foot flex-center" v-if="userInfo.userId === userProfile.userId">
             <router-link tag="a" to="/">个人设置</router-link>
             <router-link tag="a" to="/">我的等级</router-link>
           </div>
@@ -58,7 +60,7 @@
       <div class="center shadow">
         <div class="card-header flex-between">
           <p class="flex-row">
-            听歌排行 <span>（累积听歌{{ userInfo.listenSongs }}首）</span>
+            听歌排行 <span>（累积听歌{{ userDetail.listenSongs }}首）</span>
           </p>
           <div class="tab flex-row">
             <span :class="type == 1 ? 'active' : ''" @click="changeType(1)"
@@ -70,7 +72,8 @@
             >
           </div>
         </div>
-        <artist-list :songs="songs" :isPerson="isPerson" />
+        <artist-list v-if="songs.length > 0" :songs="songs" :isPerson="isPerson" />
+        <nice-empty v-else emptyText="ta可能不想让我们看到"></nice-empty>
       </div>
       <div class="right">
         <div class="my module shadow">
@@ -107,6 +110,7 @@ export default {
       num: 2,
       type: 1,
       userDetail: {},
+      userProfile: {},
       isPerson: true
     }
   },
@@ -120,7 +124,17 @@ export default {
       return this.utils.getAstro(this.userInfo.birthday)
     }
   },
-  watch: {},
+  watch: {
+    $route(newVal, oldVal) {
+      console.log(newVal.query.id)
+      if(newVal.query.id) {
+        this.getUserDetail(newVal.query.id)
+      } else {
+        this.getUserDetail(this.userInfo.userId)
+      }
+      this._initialize()
+    }
+  },
   methods: {
     // 获取省市
     getArea() {
@@ -128,7 +142,7 @@ export default {
         .get('https://restapi.amap.com/v3/config/district', {
           params: {
             key: '0f57ee7d5045187c48cd268f9d19d815',
-            keywords: this.userInfo.province,
+            keywords: this.userProfile.province,
             subdistrict: 1,
             extensions: 'base'
           }
@@ -139,7 +153,7 @@ export default {
             let subDistricts = response.data.districts[0].districts
             this.provinceName = districts.name
             subDistricts.map(item => {
-              if (item.adcode == this.userInfo.city) {
+              if (item.adcode == this.userProfile.city) {
                 this.cityName = item.name
               }
             })
@@ -155,11 +169,13 @@ export default {
       this.getUserRecord()
     },
     // 获取用户信息
-    async getUserDetail() {
+    async getUserDetail(id) {
       try {
-        let res = await this.$api.getUserDetail(this.userInfo.userId)
+        let res = await this.$api.getUserDetail(id)
         if (res.code === 200) {
           this.userDetail = res
+          this.userProfile =  res.profile
+          this._initialize()
         }
       } catch (error) {
         console.log(error)
@@ -168,7 +184,7 @@ export default {
     // 获取用户播放记录
     async getUserRecord() {
       try {
-        let res = await this.$api.getUserRecord(this.userInfo.userId, this.type)
+        let res = await this.$api.getUserRecord(this.userProfile.userId, this.type)
         if (res.code === 200) {
           if (this.type == 1) {
             this.songs = this._normalizeSongs(res.weekData)
@@ -183,13 +199,13 @@ export default {
     // 获取用户歌单
     async getUserArtist() {
       try {
-        let res = await this.$api.getUserArtist(this.userInfo.userId)
+        let res = await this.$api.getUserArtist(this.userProfile.userId)
         if (res.code === 200) {
           let list = res.playlist
           let myList = []
           let collectList = []
           list.map(item => {
-            if (!item.subscribed) {
+            if (item.userId === this.userProfile.userId) {
               myList.push(item)
             } else {
               collectList.push(item)
@@ -201,6 +217,12 @@ export default {
       } catch (error) {
         console.log(error)
       }
+    },
+    // 初始化
+    _initialize() {
+      this.getArea()
+      this.getUserRecord()
+      this.getUserArtist()
     },
     // 处理歌曲
     _normalizeSongs(list) {
@@ -217,10 +239,12 @@ export default {
   },
   created() {},
   mounted() {
-    this.getArea()
-    this.getUserRecord()
-    this.getUserDetail()
-    this.getUserArtist()
+    let userid = this.$route.query.id
+    if(userid) {
+      this.getUserDetail(userid)
+    } else {
+      this.getUserDetail(this.userInfo.userId)
+    }
   }
 }
 </script>
@@ -237,6 +261,7 @@ export default {
   }
   .personal-main {
     display: flex;
+    align-items: flex-start;
     .left {
       width: 350px;
       position: relative;

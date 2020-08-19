@@ -18,7 +18,9 @@ const state = {
   // 播放索引
   currentIndex: -1,
   // 搜索历史
-  searchHistory: getSearch()
+  searchHistory: getSearch(),
+  // 历史播放列表
+  historyList: []
 }
 
 export default state
