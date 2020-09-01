@@ -236,7 +236,7 @@ export default {
           this.albums = res.hotAlbums
         }
       } catch (error) {
-        this.$message.error('error')
+        console.log(error)
       }
     },
     // 获取歌手MV
@@ -252,7 +252,7 @@ export default {
           this.mvs = this._normalizeVideos(res.mvs)
         }
       } catch (error) {
-        this.$message.error('error')
+        console.log(error)
       }
     },
     // 获取歌手简介

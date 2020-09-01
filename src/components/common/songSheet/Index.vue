@@ -109,7 +109,6 @@ export default {
         transition: all 0.4s;
       }
       &:before {
-        border: .5px solid #d6d6d6;
         right: 6px;
         transform: scale(.85);
         transform-origin: 100% 50%;
@@ -117,7 +116,6 @@ export default {
         border-radius: 2px;
       }
       &:after {
-        border: .5px solid #c4c4c4;
         right: 4px;
         transform: scale(.73);
         transform-origin: 100% 50%;

@@ -116,7 +116,7 @@ export default {
           this.hotCategories = list
         }
       } catch (error) {
-        this.$message.error('error')
+        console.log(error)
       }
     },
     // 获取视频标签列表
@@ -130,7 +130,7 @@ export default {
           this.tags = list
         }
       } catch (error) {
-        this.$message.error('error')
+        console.log(error)
       }
     },
     // 获取全部视频列表
@@ -148,7 +148,7 @@ export default {
           }
         }
       } catch (error) {
-        this.$message.error('error')
+        console.log(error)
       }
     },
     // 获取视频标签/分类下的视频
@@ -164,7 +164,7 @@ export default {
           }
         }
       } catch (error) {
-        this.$message.error('error')
+        console.log(error)
       }
     },
     // 处理视频

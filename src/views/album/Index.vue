@@ -170,7 +170,7 @@ export default {
           this.hotAlbums = res.hotAlbums
         }
       } catch (error) {
-        this.$message.error('error')
+        console.log(error)
       }
     },
     // 获取评论
@@ -190,7 +190,7 @@ export default {
           }
         }
       } catch (error) {
-        this.$message.error('error')
+        console.log(error)
       }
     },
     // 处理歌曲

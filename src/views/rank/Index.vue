@@ -46,7 +46,7 @@ export default {
           this.fullscreenLoading = false
         }
       } catch (error) {
-        this.$message.error('error')
+        console.log(error)
       }
     }
   },
@@ -70,7 +70,7 @@ export default {
         background: $color-theme;
         position: absolute;
         left: 0;
-        top: -3px;
+        top: 2px;
       }
     }
   }

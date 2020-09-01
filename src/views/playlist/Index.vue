@@ -155,7 +155,7 @@ export default {
           this.cateList = this.categoryGroup(res.sub, 'category')
         }
       } catch (error) {
-        this.$message.error('error')
+        console.log(error)
       }
     },
     // 获取热门歌单分类
@@ -166,7 +166,7 @@ export default {
           this.hotCategories = res.tags
         }
       } catch (error) {
-        this.$message.error('error')
+        console.log(error)
       }
     },
     // 获取歌单 默认全部
@@ -186,7 +186,7 @@ export default {
           this.fullscreenLoading = false
         }
       } catch (error) {
-        this.$message.error('error')
+        console.log(error)
       }
     },
     // 根据分类进行分组

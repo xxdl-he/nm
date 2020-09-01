@@ -236,7 +236,7 @@ export default {
         this.songs = this._normalizeSongs(res)
         this.loading = false
       } catch (error) {
-        this.$message.error('error')
+        console.log(error)
       }
     },
     // 处理歌曲
