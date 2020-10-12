@@ -48,3 +48,14 @@ $ cd desktop-nicemusic
 $ npm install
 $ npm run serve
 ```
+
+## 打包上线
+```shell
+$ https://github.com/Binaryify/NeteaseCloudMusicApi 构建后端服务（这个需要自行解决，不知道的建议找后端的朋友帮忙）
+$ 构建成功后打开是这样的界面就代表ok了（https://nicemusic-api.lxhcool.cn/）
+$ 构建后会有接口地址，在项目src/api/config.js中将production下面的接口地址修改成自己的api地址
+$ cd desktop-nicemusic
+$ npm install
+$ npm run build
+$ 生成dist文件夹，将里面的内容上传到自己的服务器就可以了
+```
